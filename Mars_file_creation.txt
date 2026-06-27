@@ -1,0 +1,31 @@
+Here's the full breakdown across all three scripts.
+
+## Files you create yourself (download once, keep on disk)
+
+These are the 3 scripts I gave you — you save these somewhere on your machine and run them in Isaac Sim's Script Editor (or via `./python.sh script.py`):
+
+1. `mars_rover_rocker_bogie.py`
+2. `mars_environment.py`
+3. `mars_data_collection_policy.py`
+
+That's it on the "you create" side — no folders needed for these, just save the `.py` files wherever's convenient.
+
+## Everything else is created automatically by the scripts at runtime
+
+**From `mars_rover_rocker_bogie.py`:**
+- USD prim hierarchy at `/World/MarsRover` (body, rockers, bogies, wheels, joints) — lives inside the Isaac Sim stage, not on disk as separate files.
+
+**From `mars_environment.py`:**
+- USD prim hierarchy at `/World/MarsEnvironment` (terrain mesh, rocks, craters, lighting) — also just stage content, no disk files.
+
+**From `mars_data_collection_policy.py`:**
+- Adds a camera + semantic labels to the existing stage (no new files for this part)
+- Creates the output directory and dataset on disk automatically:
+  - `/home/claude/mars_dataset/` (the `OUTPUT_DIR` constant — **you should change this path** to wherever you actually want the dataset saved, e.g. `~/mars_dataset` or a path on a drive with space)
+    - `rgb/` — RGB PNG frames
+    - `semantic_segmentation/` — raw ID segmentation masks
+    - `semantic_segmentation_colorized/` (or similar, named by BasicWriter) — viewable color masks
+    - a label-mapping JSON (class name ↔ color/ID)
+    - `rover_trajectory_metadata.json` — pose + avoidance flag per captured frame
+
+So practically: you only need to handle the 3 `.py` files. Everything inside Isaac Sim (`/World/...`) and the entire dataset folder structure get generated automatically the moment you run the scripts and hit Play — just make sure to edit `OUTPUT_DIR` in the third script to a real path on your system before running it, since `/home/claude/...` was just my sandbox path.
